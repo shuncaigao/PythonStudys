@@ -23,7 +23,7 @@ class School(models.Model):
     # 学校地址
     addr = models.CharField(max_length=128)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -40,7 +40,7 @@ class UserProfile(models.Model):
     # 学校
     school = models.ForeignKey('School')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -75,7 +75,7 @@ class Customer(models.Model):
     source_type = models.CharField(max_length=64, choices=course_type_choices)
     referral_from = models.ForeignKey('self', blank=True, null=True, related_name='referraled_who')
     status_choices = (('signed', u'已报名'),
-                      ('unregistered', u'维保名'),
+                      ('unregistered', u'未报名'),
                       ('graduated', u'已毕业'),
                       ('drop-off', u'退学'),
                       )
@@ -90,7 +90,7 @@ class Customer(models.Model):
     # 自动创建日期 在admin上显示中文
     date = models.DateField(u'咨询日期', auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s(%s)' % (self.qq, self.name)
 
 
@@ -114,7 +114,7 @@ class CustomerTrackRecord(models.Model):
 
     status = models.IntegerField(u'状态', choices=status_choices, help_text=u'客户选择的')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.custorm
 
 
@@ -134,7 +134,7 @@ class Course(models.Model):
     # 课程介绍
     introduction = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -158,7 +158,7 @@ class ClassList(models.Model):
     # 结业时间
     graduate_date = models.DateField()
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s(%s)(%s)' % (self.course.name, self.course_type, self.semester)
 
     class Meta:
@@ -181,7 +181,7 @@ class CourseRecord(models.Model):
     # 学生
     students = models.ManyToManyField('Customer')
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s, %s' % (self.class_obj, self.day_num)
 
     class Meta:
@@ -223,5 +223,5 @@ class StudyRecord(models.Model):
     # 备注
     note = models.CharField(u'备注', max_length=255, blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s, %s, %s' % (self.course_record, self.student, self.record)
