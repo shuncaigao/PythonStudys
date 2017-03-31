@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from crm import models
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from crm import forms
 
 
 # Create your views here.
@@ -22,3 +23,18 @@ def customers(request):
         customer_objs = paginator.page(paginator.num_pages)
 
     return render(request, 'crm/customers.html', {'customer_list': customer_objs})
+
+
+def customers_detail(request, customer_id):
+    customer_obj = models.Customer.objects.get(id=customer_id)
+    if request.method == 'POST':
+        form = forms.CustomerModelForm(request.POST, instance=customer_obj)
+        if form.is_valid():
+            form.save()
+            base_url = '/'.join(request.path.split('/'))[:-2]
+            print('url:', base_url)
+            # 跳转
+            return redirect(base_url)
+    else:
+        form = forms.CustomerModelForm(instance=customer_obj)
+    return render(request, 'crm/customer_detail.html', {'customer_form': form})
