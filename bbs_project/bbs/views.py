@@ -14,7 +14,14 @@ def index(request):
 
 def category(request, id):
     category_obj = models.Category.objects.get(id=id)
+
+    # 显示全部
+    if category_obj.position_index == 1:
+        article_list = models.Article.objects.filter(status='published')
+    else:
+        # 通过id选择去显示文章
+        article_list = models.Article.objects.filter(category_id=category_obj.id, status='published')
     return render(request, 'bbs/index.html', {'category_list': category_list,
-                                              'category_obj': category_obj})
+                                              'category_obj': category_obj, 'article_list': article_list})
 
 # def acc_login(request)
